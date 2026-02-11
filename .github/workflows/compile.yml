@@ -8,10 +8,7 @@ permissions:
 # Controls when the action will run. Triggers the workflow on push or pull request 
 # events but only for the master branch
 on:
-  push:
-    branches: [ 4.14 ]
-  pull_request:
-    branches: [ 4.14 ]
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -21,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.11]
+        python-version: [3.11]
 
     steps:
     - uses: actions/checkout@v2
@@ -41,3 +38,18 @@ jobs:
     - name: Run a multi-line script
       run: |
         make html
+        make markdown
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: wazuh-docs-4.14.2
+        path: build/html
+
+
+    - name: Upload artifact markdown
+      uses: actions/upload-artifact@v4
+      with:
+        name: wazuh-docs-4.14.2-markdown
+        path: build/markdown
+
